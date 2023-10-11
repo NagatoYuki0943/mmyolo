@@ -13,7 +13,6 @@ palette = [
     (0, 182, 199), (0, 226, 252), (182, 182, 255), (0, 0, 230), (220, 20, 60),
     (163, 255, 0), (0, 82, 0), (3, 95, 161), (0, 80, 100), (183, 130, 88)
 ]
-num_classes = len(classes)
 metainfo = dict(classes=classes, palette=palette)
 load_from = 'https://download.openmmlab.com/mmyolo/v0/yolov8/yolov8_s_syncbn_fast_8xb16-500e_coco/yolov8_s_syncbn_fast_8xb16-500e_coco_20230117_180101-5aa5f0f1.pth'  # noqa
 
@@ -28,10 +27,11 @@ train_data_prefix = 'VOC2007/'  # Prefix of train image path
 val_ann_file = 'VOC2007/ImageSets/Main/val.txt'
 val_data_prefix = 'VOC2007/'  # Prefix of val image path
 
+num_classes = len(classes)  # Number of classes for classification
 # Batch size of a single GPU during training
 train_batch_size_per_gpu = 16
 # Worker to pre-fetch data for each single GPU during training
-train_num_workers = 16
+train_num_workers = 8
 # persistent_workers must be False if num_workers is 0
 persistent_workers = True
 
@@ -57,9 +57,9 @@ img_scale = (640, 640)  # width, height
 # Dataset type, this will be used to define the dataset
 dataset_type = 'YOLOv5VOCDataset'
 # Batch size of a single GPU during validation
-val_batch_size_per_gpu = 16
+val_batch_size_per_gpu = 1
 # Worker to pre-fetch data for each single GPU during validation
-val_num_workers = 8
+val_num_workers = 2
 
 # Config of batch shapes. Only on val.
 # We tested YOLOv8-m will get 0.02 higher than not using it.
@@ -186,7 +186,7 @@ albu_train_transforms = [
 ]
 
 pre_transform = [
-    dict(type='LoadImageFromFile', file_client_args=_base_.file_client_args),
+    dict(type='LoadImageFromFile', backend_args=_base_.backend_args),
     dict(type='LoadAnnotations', with_bbox=True)
 ]
 
@@ -258,12 +258,12 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file=train_ann_file,
-        data_prefix=dict(sub_data_root=train_data_prefix),
+        data_prefix=dict(sub_data_root=val_data_prefix),
         filter_cfg=dict(filter_empty_gt=False, min_size=32),
         pipeline=train_pipeline))
 
 test_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=_base_.file_client_args),
+    dict(type='LoadImageFromFile', backend_args=_base_.backend_args),
     dict(type='YOLOv5KeepRatioResize', scale=img_scale),
     dict(
         type='LetterResize',
@@ -336,10 +336,9 @@ custom_hooks = [
 ]
 
 val_evaluator = dict(
-    type='mmdet.CocoMetric',
-    proposal_nums=(100, 1, 10),
-    ann_file=data_root + val_ann_file,
-    metric='bbox')
+    type='mmdet.VOCMetric',
+    iou_thrs=[0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95],   # mAP50-95
+    metric='mAP')
 test_evaluator = val_evaluator
 
 train_cfg = dict(

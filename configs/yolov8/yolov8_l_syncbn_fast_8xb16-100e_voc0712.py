@@ -1,4 +1,4 @@
-_base_ = './yolov8_s_syncbn_fast_8xb16-100e_voc0712.py'
+_base_ = './yolov8_m_syncbn_fast_8xb16-100e_voc0712.py'
 
 load_from = 'https://download.openmmlab.com/mmyolo/v0/yolov8/yolov8_l_syncbn_fast_8xb16-500e_coco/yolov8_l_syncbn_fast_8xb16-500e_coco_20230217_182526-189611b6.pth'  # noqa
 
