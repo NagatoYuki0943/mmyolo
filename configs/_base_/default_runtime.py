@@ -4,7 +4,7 @@ default_hooks = dict(
     timer=dict(type='IterTimerHook'),
     logger=dict(type='LoggerHook', interval=50),
     param_scheduler=dict(type='ParamSchedulerHook'),
-    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=10, save_best='auto'), # https://mmdetection.readthedocs.io/zh_CN/latest/user_guides/visualization.html#id3
+    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=5, save_best='auto'), # https://mmdetection.readthedocs.io/zh_CN/latest/user_guides/visualization.html#id3
     sampler_seed=dict(type='DistSamplerSeedHook'),
     visualization=dict(type='mmdet.DetVisualizationHook'))
 
