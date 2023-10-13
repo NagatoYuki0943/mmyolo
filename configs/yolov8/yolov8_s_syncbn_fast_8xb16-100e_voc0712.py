@@ -335,10 +335,13 @@ custom_hooks = [
         switch_pipeline=train_pipeline_stage2)
 ]
 
+# Pascal VOC2007 uses `11points` as default evaluate mode, while PASCAL
+# VOC2012 defaults to use 'area'.
 val_evaluator = dict(
     type='mmdet.VOCMetric',
     iou_thrs=[0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95],   # mAP50-95
-    metric='mAP')
+    metric='mAP',
+    eval_mode="area")
 test_evaluator = val_evaluator
 
 train_cfg = dict(
