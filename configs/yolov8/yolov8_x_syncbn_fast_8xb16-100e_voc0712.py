@@ -9,3 +9,16 @@ model = dict(
     backbone=dict(deepen_factor=deepen_factor, widen_factor=widen_factor),
     neck=dict(deepen_factor=deepen_factor, widen_factor=widen_factor),
     bbox_head=dict(head_module=dict(widen_factor=widen_factor)))
+
+### change batch_size ###
+# # Batch size of a single GPU during training
+# train_batch_size_per_gpu = 8
+# # Worker to pre-fetch data for each single GPU during training
+# train_num_workers = 8
+# train_dataloader = dict(
+#     batch_size=train_batch_size_per_gpu,
+#     num_workers=train_num_workers,)
+
+# optim_wrapper = dict(
+#     optimizer=dict(
+#         batch_size_per_gpu=train_batch_size_per_gpu),)
