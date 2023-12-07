@@ -258,7 +258,7 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file=train_ann_file,
-        data_prefix=dict(sub_data_root=val_data_prefix),
+        data_prefix=dict(sub_data_root=train_data_prefix),
         filter_cfg=dict(filter_empty_gt=False, min_size=32),
         pipeline=train_pipeline))
 
@@ -341,7 +341,7 @@ val_evaluator = dict(
     type='mmdet.VOCMetric',
     iou_thrs=[0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95],   # mAP50-95
     metric='mAP',
-    eval_mode="area")
+    eval_mode='area')
 test_evaluator = val_evaluator
 
 train_cfg = dict(
