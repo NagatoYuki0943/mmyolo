@@ -20,7 +20,3 @@ model = dict(
 # train_dataloader = dict(
 #     batch_size=train_batch_size_per_gpu,
 #     num_workers=train_num_workers,)
-
-# optim_wrapper = dict(
-#     optimizer=dict(
-#         batch_size_per_gpu=train_batch_size_per_gpu),)
